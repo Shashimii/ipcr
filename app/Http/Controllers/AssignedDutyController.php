@@ -27,6 +27,8 @@ class AssignedDutyController extends Controller
         $officers = OfficerResource::collection(Officer::all());
 
         return Inertia::render('AssignedDuties/Index', [
+            'search' => $request->search ?? '',
+            'officer_id' => $request->officer_id ?? '',
             'assignedDuties' => $assignedDuties,
             'officers' => $officers
         ]);
@@ -38,8 +40,6 @@ class AssignedDutyController extends Controller
         $duties = DutyResource::collection(Duty::all());
 
         return Inertia::render('AssignedDuties/Create', [
-            'search' => $request->search ?? '',
-            'officer_id' => $request->officer_id ?? '',
             'officers' => $officers,
             'duties' => $duties
         ]);
