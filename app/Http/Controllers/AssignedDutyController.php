@@ -29,6 +29,7 @@ class AssignedDutyController extends Controller
         return Inertia::render('AssignedDuties/Index', [
             'search' => $request->search ?? '',
             'officer_id' => $request->officer_id ?? '',
+            'status_filter' => $request->status ?? '',
             'assignedDuties' => $assignedDuties,
             'officers' => $officers
         ]);

@@ -43,13 +43,17 @@ class AssignedDuty extends Model
                     ->orWhereHas('officer', function ($query) use ($request) {
                         $query->where('name', 'like', '%' . $request->search . '%'); // Officer's Name
                     })
-
                     ->orWhereHas('duty', function ($query) use ($request) {
                         $query->where('name', 'like', '%' . $request->search . '%'); // Duty's Name
                     });
             });
         })
         
+        // Status
+        ->when($request->has('status') && $request->status !== '', function ($query) use ($request) {
+            $query->where('is_done', $request->status);
+        })
+        // Officer
         ->when($request->officer_id, function ($query) use ($request) {
             $query->where('officer_id', $request->officer_id);
         });

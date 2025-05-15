@@ -62,6 +62,7 @@ const saveDelete = () => {
 // search parameters
 let search = ref(usePage().props.search ?? ""),
     officer_id = ref(usePage().props.officer_id ?? ""),
+    status_filter = ref(usePage().props.status_filter ?? ""),
     pageNumber = ref(1)
 
 // search url
@@ -75,6 +76,10 @@ let assignedDutiesUrl = computed(() => {
 
     if (officer_id) {
         url.searchParams.append('officer_id', officer_id.value);
+    }
+
+    if (status_filter) {
+        url.searchParams.append('status', status_filter.value);
     }
 
     return url
@@ -156,7 +161,7 @@ watch(
                                 v-model="search"
                                 type="text"
                                 autocomplete="off"
-                                placeholder="Search officer, odts..."
+                                placeholder="Search duty, odts..."
                                 id="search"
                                 class="block rounded-lg border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
@@ -166,7 +171,7 @@ watch(
                             v-model="officer_id"
                             class="block rounded-lg border-0 py-2 ml-5 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                         >
-                            <option value="">Filter By officer</option>
+                            <option value="">Filter by officer</option>
                             <option
                                 :value="item.id"
                                 :key="item.id"
@@ -174,6 +179,15 @@ watch(
                             >
                                 {{ item.name }}
                             </option>
+                        </select>
+
+                        <select
+                            v-model="status_filter"
+                            class="block rounded-lg border-0 py-2 ml-5 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                        >
+                            <option value="">Filter by status</option>
+                            <option value="1">Done</option>
+                            <option value="0">Not Done</option>
                         </select>
                     </div>
 
