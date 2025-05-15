@@ -28,12 +28,6 @@ const form = useForm({
 })
 
 const edit = (id) => {
-    // // show js dialog
-    // if (confirm("Are you sure you want to delete this student ?")) {
-    //     // if confirmed
-    //     deleteForm.delete(route("students.destroy", studentId));  //useForm is being used as delete here
-    // }
-
     router.get(route('assigned-duties.edit', id));
 };
 
@@ -237,12 +231,12 @@ const saveDelete = () => {
                     Status: <strong>{{ form.is_done ? 'Done' : 'Not Done' }}</strong>
                 </p>
                 <div class="mt-6 flex justify-end gap-4">
-                    <form @submit.prevent="saveDelete">
-                        <DangerButton :disabled="form.processing">Delete Assigned Duty</DangerButton>
-                    </form>
                     <SecondaryButton @click="showModalDelete = false" class="btn btn-secondary">
                         Don't Delete
                     </SecondaryButton>
+                    <form @submit.prevent="saveDelete">
+                        <DangerButton :disabled="form.processing">Delete Assigned Duty</DangerButton>
+                    </form>
                 </div>
             </div>
         </template>
