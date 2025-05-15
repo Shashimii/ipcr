@@ -23,8 +23,8 @@ defineProps({
 })
 
 const form = useForm({
-    officer_id: null,
-    duty_id: null,
+    officer_id: '',
+    duty_id: '',
     odts_code: '',
     assigned_at: '',
     is_done: false
@@ -102,7 +102,6 @@ const cancel = () => {
                                                         v-for="item in officers.data" 
                                                         :key="item.id"
                                                         :value="item.id"
-                                                        value="1"
                                                     >
                                                         {{ item.name }}
                                                     </option>
@@ -124,14 +123,13 @@ const cancel = () => {
                                                     class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                     :class="{'text-red-900 focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.duty_id}"
                                                 >
-                                                    <option value="">
+                                                    <option value=""> 
                                                         Select a Duty
                                                     </option>
                                                     <option 
                                                         v-for="item in duties.data" 
                                                         :key="item.id"
                                                         :value="item.id"
-                                                        value="1"
                                                     >
                                                         {{ item.name }}
                                                     </option>
@@ -146,6 +144,7 @@ const cancel = () => {
                                                     type="text"
                                                     class="mt-1 block w-full"
                                                     v-model="form.odts_code"
+                                                    placeholder="Enter Odts Code"
                                                 />
                                                 <InputError class="mt-2" :message="form.errors.odts_code" />
                                             </div>
