@@ -7,7 +7,7 @@ import DangerButton from '@/Components/DangerButton.vue';
 import Modal from '@/Components/Modal.vue';
 import Pagination  from '@/Components/Pagination.vue';
 import { Head, Link, useForm, usePage, router } from '@inertiajs/vue3';
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 
 defineProps({
@@ -60,7 +60,7 @@ const saveDelete = () => {
 // searchbar
 
 // search parameters
-let search = ref(usePage().props.search),
+let search = ref(usePage().props.search ?? ""),
     officer_id = ref(usePage().props.officer_id ?? ""),
     pageNumber = ref(1)
 
