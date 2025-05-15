@@ -58,7 +58,7 @@ const cancel = () => {
 </script>
 
 <template>
-        <Head title="Assign Duty" />
+        <Head title="Edit Assigned Duty" />
 
     <AuthenticatedLayout>
         <template #header>
