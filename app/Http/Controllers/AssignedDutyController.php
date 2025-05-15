@@ -18,12 +18,17 @@ use Carbon\Carbon;
 
 class AssignedDutyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $assignedDuties = AssignedDutyResource::collection(AssignedDuty::with(['officer', 'duty'])->get());
+        // search query
+        $assignedDutiesQuery = AssignedDuty::search($request)->with(['officer', 'duty']);
+
+        $assignedDuties = AssignedDutyResource::collection($assignedDutiesQuery->paginate(10));
+        $officers = OfficerResource::collection(Officer::all());
 
         return Inertia::render('AssignedDuties/Index', [
             'assignedDuties' => $assignedDuties,
+            'officers' => $officers
         ]);
     }
 
@@ -33,6 +38,8 @@ class AssignedDutyController extends Controller
         $duties = DutyResource::collection(Duty::all());
 
         return Inertia::render('AssignedDuties/Create', [
+            'search' => $request->search ?? '',
+            'officer_id' => $request->officer_id ?? '',
             'officers' => $officers,
             'duties' => $duties
         ]);
