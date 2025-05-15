@@ -5,13 +5,19 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 import Modal from '@/Components/Modal.vue';
-import { Head, Link, useForm, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import Pagination  from '@/Components/Pagination.vue';
+import { Head, Link, useForm, usePage, router } from '@inertiajs/vue3';
+import { ref, computed, watch, onMounted } from 'vue';
 
 
 defineProps({
     assignedDuties: {
         type: Object, 
+        required: true
+    },
+
+    officers: {
+        type: Object,
         required: true
     }
 });
@@ -51,6 +57,56 @@ const saveDelete = () => {
     });
 }
 
+// searchbar
+
+// search parameters
+let search = ref(usePage().props.search),
+    officer_id = ref(usePage().props.officer_id ?? ""),
+    pageNumber = ref(1)
+
+// search url
+let assignedDutiesUrl = computed(() => {
+    let url = new URL(route('assigned-duties.index'));
+    url.searchParams.append('page', pageNumber.value);
+
+    if (search.value) {
+        url.searchParams.append('search', search.value);
+    }
+
+    if (officer_id) {
+        url.searchParams.append('officer_id', officer_id.value);
+    }
+
+    return url
+});
+
+// retain pagination pages on search
+const updatedPageNumber = (link) => {
+    pageNumber.value = link.url.split('=')[1];
+}
+
+// visit the url
+watch(
+    () => assignedDutiesUrl.value,
+    (updatedUrl) => {
+        router.visit(updatedUrl, {
+            preserveScroll: true,
+            preserveState: true,
+            replace: true
+        })
+    }
+)
+
+// reset page number
+watch(
+    () => search.value,
+    (value) => {
+        if (value) {
+            pageNumber.value = 1;
+        }
+    }
+)
+
 </script>
 
 <template>
@@ -88,7 +144,7 @@ const saveDelete = () => {
                         </div>
                     </div>
 
-                    <div class="flex flex-col justify-between sm:flex-row mt-6">
+                    <div class="flex flex-col justify-left sm:flex-row mt-6">
                         <div class="relative text-sm text-gray-800 col-span-3">
                             <div
                                 class="absolute pl-2 left-0 top-0 bottom-0 flex items-center pointer-events-none text-gray-500"
@@ -97,13 +153,28 @@ const saveDelete = () => {
                             </div>
 
                             <input
+                                v-model="search"
                                 type="text"
                                 autocomplete="off"
-                                placeholder="Search students data..."
+                                placeholder="Search officer, odts..."
                                 id="search"
                                 class="block rounded-lg border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
+
+                        <select
+                            v-model="officer_id"
+                            class="block rounded-lg border-0 py-2 ml-5 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                        >
+                            <option value="">Filter By officer</option>
+                            <option
+                                :value="item.id"
+                                :key="item.id"
+                                v-for="item in officers.data"
+                            >
+                                {{ item.name }}
+                            </option>
+                        </select>
                     </div>
 
                     <div class="mt-8 flex flex-col">
@@ -199,7 +270,10 @@ const saveDelete = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div>Pagination Links</div>
+                                <Pagination 
+                                    :data="assignedDuties" 
+                                    :updatedPageNumber="updatedPageNumber"
+                                /> 
                             </div>
                         </div>
                     </div>
