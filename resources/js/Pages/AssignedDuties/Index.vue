@@ -115,7 +115,7 @@ watch(
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Assigned Duties" />
 
     <AuthenticatedLayout>
         <template #header>
