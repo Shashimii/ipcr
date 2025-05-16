@@ -34,6 +34,16 @@ class AssignedDuty extends Model
 
     public function scopeSearch(Builder $query, Request $request)
     {
+        // Officer
+        if ($request->has('officer_id') && $request->officer_id !== '') {
+            $query->where('officer_id', $request->officer_id);
+        };
+        
+        // Status
+        if ($request->filled('status')) {
+            $query->where('is_done', $request->status);
+        }; 
+
         return $query->when($request->search, function ($query) use ($request) {
             $query->where(function ($query) use ($request) {
                 $query
@@ -47,15 +57,6 @@ class AssignedDuty extends Model
                         $query->where('name', 'like', '%' . $request->search . '%'); // Duty's Name
                     });
             });
-        })
-        
-        // Status
-        ->when($request->has('status') && $request->status !== '', function ($query) use ($request) {
-            $query->where('is_done', $request->status);
-        })
-        // Officer
-        ->when($request->officer_id, function ($query) use ($request) {
-            $query->where('officer_id', $request->officer_id);
         });
     }
 
