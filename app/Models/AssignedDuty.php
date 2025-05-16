@@ -16,7 +16,7 @@ class AssignedDuty extends Model
         'is_done' => 'boolean',         // Format is_done as a boolean
     ];
 
-    // whenLoaded eager loading is declared like this
+    // load the related officer and duty with assigned duty
     protected $with = ['officer', 'duty'];
 
     // Relationships
@@ -30,31 +30,32 @@ class AssignedDuty extends Model
         return $this->belongsTo(Duty::class);
     }
 
-    // search query
+    // Search Query
 
     public function scopeSearch(Builder $query, Request $request)
     {
-        // Officer
-        if ($request->has('officer_id') && $request->officer_id !== '') {
+        // Officer Filter
+        if ($request->filled('officer_id')) {
             $query->where('officer_id', $request->officer_id);
         };
         
-        // Status
+        // Status Filter
         if ($request->filled('status')) {
             $query->where('is_done', $request->status);
         }; 
 
+        // Odts Code, Assigned at, Officer Name, Duty Name Searchbar
         return $query->when($request->search, function ($query) use ($request) {
             $query->where(function ($query) use ($request) {
                 $query
-                    ->where('odts_code', 'like', '%' . $request->search . '%') // Odts Code
-                    ->orWhere('assigned_at', 'like', '%' . $request->search . '%') // Assigned at
+                    ->where('odts_code', 'like', '%' . $request->search . '%')
+                    ->orWhere('assigned_at', 'like', '%' . $request->search . '%') 
                     
                     ->orWhereHas('officer', function ($query) use ($request) {
-                        $query->where('name', 'like', '%' . $request->search . '%'); // Officer's Name
+                        $query->where('name', 'like', '%' . $request->search . '%'); 
                     })
                     ->orWhereHas('duty', function ($query) use ($request) {
-                        $query->where('name', 'like', '%' . $request->search . '%'); // Duty's Name
+                        $query->where('name', 'like', '%' . $request->search . '%'); 
                     });
             });
         });
