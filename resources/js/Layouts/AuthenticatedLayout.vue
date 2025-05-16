@@ -45,6 +45,18 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Assigned Duties
                                 </NavLink>
+                                <NavLink
+                                    :href="route('officers.index')"
+                                    :active="route().current('officers.index')"
+                                >
+                                    Officers
+                                </NavLink>
+                                <NavLink
+                                    :href="route('duties.index')"
+                                    :active="route().current('duties.index')"
+                                >
+                                    Duties
+                                </NavLink>
                             </div>
                         </div>
 
