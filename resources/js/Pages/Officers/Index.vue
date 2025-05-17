@@ -2,8 +2,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import MagnifyingGlass from '@/Components/Icons/MagnifyingGlass.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import Pagination from '@/Components/Pagination.vue';
+import Modal from '@/Components/Modal.vue';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import { ref, computed, watch } from 'vue';
+
 
 defineProps({
     officers: {
@@ -11,6 +16,75 @@ defineProps({
         required: true
     }
 });
+
+const showModalDelete = ref(false);
+
+const form = useForm({
+    id: null,
+    name: ''
+});
+
+const edit = (id) => {
+    router.get(route('officers.edit', id));
+}
+
+const openDeleteModal = (officers) => {
+    form.id = officers.id;
+    form.name = officers.name;
+
+    showModalDelete.value = true;
+}
+
+const saveDelete = () => {
+    form.delete(route('officers.destroy', form.id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            showModalDelete.value = false;
+        }
+    })
+}
+
+//searchbar
+
+let pageNumber = ref(1),
+    search = ref(usePage().props.search ?? "")
+
+const updatedPageNumber = (link) => {
+    pageNumber.value = link.url.split('=')[1];
+}
+
+let url = computed(() => {
+    let url = new URL(route('officers.index'));
+    url.searchParams.set('page', pageNumber.value);
+
+    if (search.value) {
+        url.searchParams.append('search', search.value);
+    }
+
+
+    return url
+});
+
+watch(
+    () => url.value,
+    (updatedUrl) => {
+        router.visit(updatedUrl, {
+            preserveScroll: true,
+            preserveState: true,
+            replace: true
+        })
+    }
+)
+
+watch(
+    () => search.value,
+    (value) => {
+        if (value) {
+            pageNumber.value = 1;
+        }
+    }
+)
+
 
 </script>
 
@@ -57,6 +131,7 @@ defineProps({
                             </div>
 
                             <input
+                                v-model="search"
                                 type="text"
                                 autocomplete="off"
                                 placeholder="Search..."
@@ -115,10 +190,10 @@ defineProps({
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- <Pagination 
-                                    :data="assignedDuties" 
+                                <Pagination 
+                                    :data="officers" 
                                     :updatedPageNumber="updatedPageNumber"
-                                />  -->
+                                /> 
                             </div>
                         </div>
                     </div>
@@ -126,4 +201,34 @@ defineProps({
             </div>
         </div>
     </AuthenticatedLayout>
+
+    
+    <Modal :show="showModalDelete" @close="showModalDelete = false" maxWidth="lg" :closeable="true">
+        <template #default>
+            <div class="p-6 w-[30rem]">
+                <div class="flex items-center justify-start space-x-4">
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-100">
+                        <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                        </svg>
+                    </div>
+                    
+                    <h2 class="text-lg font-semibold">Delete Officer ?</h2>
+                </div>
+
+                <p class="mt-4 text-md text-gray-600 text-left">
+                    Are you sure you want to delete officer
+                    <strong>{{ form.name }}</strong>
+                </p>
+                <div class="mt-6 flex justify-end gap-4">
+                    <SecondaryButton @click="showModalDelete = false" class="btn btn-secondary">
+                        Don't Delete
+                    </SecondaryButton>
+                    <form @submit.prevent="saveDelete">
+                        <DangerButton :disabled="form.processing">Delete Officer</DangerButton>
+                    </form>
+                </div>
+            </div>
+        </template>
+    </Modal>
 </template>
