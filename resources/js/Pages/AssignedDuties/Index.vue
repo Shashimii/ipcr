@@ -60,15 +60,21 @@ const saveDelete = () => {
 // searchbar
 
 // search parameters
-let search = ref(usePage().props.search ?? ""),
+let pageNumber = ref(1),
+    search = ref(usePage().props.search ?? ""),
     officer_id = ref(usePage().props.officer_id ?? ""),
-    status_filter = ref(usePage().props.status_filter ?? ""),
-    pageNumber = ref(1)
+    status_filter = ref(usePage().props.status_filter ?? "")
+
+
+// retain pagination pages on search
+const updatedPageNumber = (link) => {
+    pageNumber.value = link.url.split('=')[1];
+}
 
 // search url
 let assignedDutiesUrl = computed(() => {
     let url = new URL(route('assigned-duties.index'));
-    url.searchParams.append('page', pageNumber.value);
+    url.searchParams.set('page', pageNumber.value);
 
     if (search.value) {
         url.searchParams.append('search', search.value);
@@ -84,11 +90,6 @@ let assignedDutiesUrl = computed(() => {
 
     return url
 });
-
-// retain pagination pages on search
-const updatedPageNumber = (link) => {
-    pageNumber.value = link.url.split('=')[1];
-}
 
 // visit the url
 watch(
@@ -111,6 +112,26 @@ watch(
         }
     }
 )
+
+watch(
+    () => officer_id.value,
+    (value) => {
+        if (value) {
+            pageNumber.value = 1;
+        }
+    }
+)
+
+watch(
+    () => status_filter.value,
+    (value) => {
+        if (value) {
+            pageNumber.value = 1;
+        }
+    }
+)
+
+
 
 </script>
 
