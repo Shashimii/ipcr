@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { computed, onMounted } from 'vue';
+import ExcelJS from 'exceljs';
 
 let props = defineProps({
     officers: {
@@ -43,10 +44,111 @@ const getAssignedDuty = (officerId, dutyId) => {
     return dutyMap.value[key] || [];
 }
 
-onMounted(() => {
-    console.log("Duty Map on Mounted:", dutyMap.value);
-});
+// onMounted(() => {
+//     console.log("Duty Map on Mounted:", dutyMap.value);
+// });
 
+// Excel Exporting
+
+const excelExport = async () => {
+    let workbook = new ExcelJS.Workbook();
+    let worksheet = workbook.addWorksheet("Assigned Duties");
+
+    // Add headers
+    worksheet.addRow(["Duties / Targets", ...officers.map(o => o.name)]);
+
+    // Add data rows
+    duties.forEach((duty) => {
+        let rowData = [duty.name];
+
+        officers.forEach((officer) => {
+            let assignedDuties = getAssignedDuty(officer.id, duty.id);
+            if (assignedDuties.length > 0) {
+                rowData.push(assignedDuties.map(ad => `${ad.odts_code}\n${ad.assigned_at}`).join("\n"));
+            } else {
+                rowData.push("");
+            }
+        });
+
+        const row = worksheet.addRow(rowData);
+
+        // Auto height calculation based on line breaks
+        const maxLines = Math.max(...rowData.map(cell => (cell.match(/\n/g) || []).length + 1));
+        row.height = Math.max(80, maxLines * 20); // 20px per line
+    });
+
+    // Apply styles
+    worksheet.columns.forEach(column => {
+        column.width = 30; // Set column width
+    });
+
+    // Format odts code color
+    const formatTextColorGreen = (text) => {
+    const regex = /(\([^)]+\))/g; // match texts like "(text)"
+    const textParts = text.split(regex); // split text into parts needed for richText
+
+        return textParts.map(part => {
+            if (regex.test(part)) {
+                return { font: { color: { argb: '008000' } }, text: part };
+            } else {
+                return { text: part };
+            }
+        });
+    }
+
+    // Loop to Apply styles to each row and cells
+    worksheet.eachRow((row, rowNumber) => {
+        row.eachCell((cell, colNumber) => {
+
+            let cellValue = cell.value;
+
+            if (cellValue != '' && colNumber != 1) {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FFF9AA' } // Cell with value color
+                }
+            }
+
+            if (colNumber === 1) {
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'F1F1F1' } // Side column color
+                }
+            }
+
+            if (typeof cellValue === 'string' && cellValue.includes('(')) {
+                cell.value = { richText: formatTextColorGreen(cellValue) };
+            }
+
+            cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+            cell.border = {
+                top: { style: "medium", color: { argb: "000000" } },
+                left: { style: "medium", color: { argb: "000000" } },
+                bottom: { style: "medium", color: { argb: "000000" } },
+                right: { style: "medium", color: { argb: "000000" } },
+            };
+
+            if (rowNumber === 1) {
+                cell.font = { bold: true, size: 14 }; // Header font style
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'F1F1F1' } }; // Header color
+            }
+        });
+
+        if (rowNumber === 1) {
+            row.height = 40; // Header Height
+        }
+    });
+
+    // Download Excel File
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `AssignedDuties_${new Date().toISOString().split('T')[0]}.xlsx`;
+    link.click();
+};
 
 
 </script>
@@ -67,6 +169,8 @@ onMounted(() => {
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
+                        <button class="px-4 py-2 bg-blue-500 text-white rounded" @click="excelExport">Export to Excel</button>
+
                         <table class="min-w-full divide-y divide-gray-300 bg-white border border-gray-300 rounded-lg shadow">
                             <thead class="bg-gray-100">
                                 <tr class="divide-x divide-gray-300">
