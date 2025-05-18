@@ -169,50 +169,65 @@ const excelExport = async () => {
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <button class="px-4 py-2 bg-blue-500 text-white rounded" @click="excelExport">Export to Excel</button>
+                        <div class="mb-8 sm:flex sm:items-center justify-between">
+                            <div>
+                                <h3
+                                    class="text-lg leading-6 font-medium text-gray-900"
+                                >
+                                    IPCR Table
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Assigned Duties to the officers are shown here.
+                                </p>
+                            </div>
+                            
+                            <button class="px-4 py-2 bg-blue-500 text-white rounded" @click="excelExport">Export to Excel</button>
+                        </div>
 
-                        <table class="min-w-full divide-y divide-gray-300 bg-white border border-gray-300 rounded-lg shadow">
-                            <thead class="bg-gray-100">
-                                <tr class="divide-x divide-gray-300">
-                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                                        <div class="flex items-center justify-center">
-                                            <p>Duties / Targets</p>
-                                        </div>
-                                    </th>
-                                    <th :colspan="officers.length" class="px-4 py-3 text-center text-sm font-semibold text-gray-700">
-                                        <p>Action Officers</p>
-                                    </th>
-                                </tr>
-                                <tr class="bg-gray-50 divide-x divide-gray-300">
-                                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600"></th>
-                                    <th v-for="officer in officers" :key="officer.id" class="px-4 py-2 text-center text-sm font-semibold text-gray-600">
-                                        <div class="min-w-[120px] flex items-center justify-center">{{ officer.name }}</div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-300">
-                                <tr v-for="duty in duties" :key="duty.id" class="hover:bg-gray-50 divide-x divide-gray-300">
-                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 bg-gray-100">
-                                        <div class="min-h-[80px] flex items-center">{{ duty.name }}</div>
-                                    </th>
-                                    <td 
-                                        v-for="officer in officers" 
-                                        :key="officer.id" 
-                                        class="px-4 py-2 text-center"
-                                        :class="{ 'bg-green-200': getAssignedDuty(officer.id, duty.id).length > 0 }"
-                                    >
-                                        <div v-if="getAssignedDuty(officer.id, duty.id).length > 0">
-                                            <div v-for="(assigned, index) in getAssignedDuty(officer.id, duty.id)" :key="index">
-                                                <p>
-                                                    {{ assigned.odts_code }} <br>
-                                                    {{ assigned.assigned_at }}
-                                                </p>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-300 bg-white border border-gray-300 rounded-lg shadow">
+                                <thead class="bg-gray-100">
+                                    <tr class="divide-x divide-gray-300">
+                                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                                            <div class="flex items-center justify-center">
+                                                <p>Duties / Targets</p>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        </th>
+                                        <th :colspan="officers.length" class="px-4 py-3 text-center text-sm font-semibold text-gray-700">
+                                            <p>Action Officers</p>
+                                        </th>
+                                    </tr>
+                                    <tr class="bg-gray-50 divide-x divide-gray-300">
+                                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-600"></th>
+                                        <th v-for="officer in officers" :key="officer.id" class="px-4 py-2 text-center text-sm font-semibold text-gray-600">
+                                            <div class="min-w-[120px] flex items-center justify-center">{{ officer.name }}</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-300">
+                                    <tr v-for="duty in duties" :key="duty.id" class="hover:bg-gray-50 divide-x divide-gray-300">
+                                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 bg-gray-100">
+                                            <div class="min-h-[80px] flex items-center">{{ duty.name }}</div>
+                                        </th>
+                                        <td 
+                                            v-for="officer in officers" 
+                                            :key="officer.id" 
+                                            class="px-4 py-2 text-center"
+                                            :class="{ 'bg-green-200': getAssignedDuty(officer.id, duty.id).length > 0 }"
+                                        >
+                                            <div v-if="getAssignedDuty(officer.id, duty.id).length > 0">
+                                                <div v-for="(assigned, index) in getAssignedDuty(officer.id, duty.id)" :key="index">
+                                                    <p>
+                                                        {{ assigned.odts_code }} <br>
+                                                        {{ assigned.assigned_at }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
