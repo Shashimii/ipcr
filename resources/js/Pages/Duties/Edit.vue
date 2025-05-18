@@ -8,15 +8,25 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 import { Head, useForm, router } from '@inertiajs/vue3';
 
-const form = useForm({
-    name: '',
+const props = defineProps({
+    duty: {
+        type: Object,
+        required: true
+    }
 })
 
-const saveDuty = () => {
-    form.post(route('duties.store'), {
+let duty = props.duty.data
+
+const form = useForm({
+    name: duty.name,
+})
+
+const updateDuty = () => {
+    form.put(route('duties.update', duty.id), {
         onFinish: () => {
             form.reset();
         },
+
         preserveScroll: true,
         preserveState: true,
     });
@@ -32,14 +42,14 @@ const cancel = () => {
 </script>
 
 <template>
-    <Head title="Assign Duty" />
+    <Head title="Edit Duty" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Add New Duty
+                Edit Duty
             </h2>
         </template>
 
@@ -48,7 +58,7 @@ const cancel = () => {
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
                         <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-12">
-                            <form @submit.prevent="saveDuty">
+                            <form @submit.prevent="updateDuty">
                                 <div class="shadow sm:rounded-md sm:overflow-hidden">
                                     <div class="bg-white py-6 px-4 space-y-6 sm:p-6">
                                         <div>
@@ -58,16 +68,16 @@ const cancel = () => {
                                                 Duty Information
                                             </h3>
                                             <p class="mt-1 text-sm text-gray-500">
-                                                Use this form to add new duty.
+                                                Use this form to edit duty.
                                             </p>
                                         </div>
 
                                         <div class="grid grid-cols-6 gap-6">
 
                                             <div class="col-span-6 sm:col-span-3">
-                                                <InputLabel for="duty_name" value="Duty Name" />
+                                                <InputLabel for="name" value="Duty Name" />
                                                 <TextInput 
-                                                    id="duty_name"
+                                                    id="name"
                                                     type="text"
                                                     class="mt-1 block w-full"
                                                     v-model="form.name"
@@ -85,7 +95,7 @@ const cancel = () => {
                                             Cancel
                                         </SecondaryButton>
                                         <PrimaryButton :disabled="form.processing">
-                                            Add new Duty
+                                            Save Changes
                                         </PrimaryButton>
                                     </div>
                                 </div>
