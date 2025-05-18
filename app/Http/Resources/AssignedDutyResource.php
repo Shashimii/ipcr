@@ -33,7 +33,7 @@ class AssignedDutyResource extends JsonResource
             'duty' => DutyResource::make($this->whenLoaded('duty')),
             'odts_code' => $this->odts_code,
             'is_done' => $this->is_done,
-            'assigned_at' => $this->assigned_at->toFormattedDateString()
+            'assigned_at' => $this->assigned_at->format('m-d-Y')
         ];
     }
 }
