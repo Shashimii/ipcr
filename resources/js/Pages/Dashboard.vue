@@ -206,7 +206,7 @@ const excelExport = async () => {
                                 </p>
                             </div>
                             
-                            <button class="px-4 py-2 bg-blue-500 text-white rounded" @click="excelExport">Export to Excel</button>
+                            <button class="px-4 py-2 bg-green-800 text-white rounded" @click="excelExport">Export to Excel</button>
                         </div>
 
                         <div class="overflow-x-auto">
@@ -230,7 +230,7 @@ const excelExport = async () => {
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-300">
-                                    <tr v-for="duty in duties" :key="duty.id" class="hover:bg-gray-50 divide-x divide-gray-300">
+                                    <tr v-for="duty in duties" :key="duty.id" class="hover:bg-green-200 divide-x divide-gray-300">
                                         <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 bg-gray-100">
                                             <div class="min-h-[80px] flex items-center">{{ duty.name }}</div>
                                         </th>

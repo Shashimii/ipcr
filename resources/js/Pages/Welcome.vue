@@ -18,7 +18,7 @@ defineProps({
     <Head title="Welcome" />
     <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
         <GuestLayout>
-            <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-center">
+            <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-center space-x-6">
                 <Link
                     v-if="$page.props.auth.user"
                     :href="route('dashboard')"
