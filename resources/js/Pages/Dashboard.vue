@@ -26,6 +26,17 @@ let officers = props.officers.data,
     duties = props.duties.data,
     assignedDuties = props.assignedDuties.data
 
+const completedDuties = computed(() => {
+    return assignedDuties.filter(duty => duty.is_done).length;
+});
+
+const pendingDuties = computed(() => {
+    return assignedDuties.filter(duty => !duty.is_done).length;
+});
+
+const officerCount = computed(() => {
+    return officers.length;
+})
 
 let dutyMap = computed(() => {
     const map = {};
@@ -167,6 +178,20 @@ const excelExport = async () => {
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="w-full mb-8 grid grid-cols-3 gap-4">
+                    <div class="bg-green-500 text-white p-4 border-gray-300 rounded shadow flex justify-between">
+                        <p>Total Completed Duties: </p>
+                        <p>{{ completedDuties }}</p>
+                    </div>
+                    <div class="bg-red-500 text-white p-4 border-gray-300 rounded shadow flex justify-between">
+                        <p>Total Pending Duties: </p>
+                        <p>{{ pendingDuties }}</p>
+                    </div>
+                    <div class="bg-blue-500 text-white p-4 border-gray-300 rounded shadow flex justify-between">
+                        <p>Total Officers: </p>
+                        <p>{{ officerCount }}</p>
+                    </div>
+                </div>
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         <div class="mb-8 sm:flex sm:items-center justify-between">
