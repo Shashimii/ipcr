@@ -146,7 +146,7 @@ const excelExport = async () => {
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `AssignedDuties_${new Date().toISOString().split('T')[0]}.xlsx`;
+    link.download = `IPCR_${new Date().toISOString().split('T')[0]}.xlsx`;
     link.click();
 };
 
