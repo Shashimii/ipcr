@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('assigned_duties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('officer_id')->constrained('officers')->onDelete('cascade');
+            $table->foreignId('officer_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('duty_id')->constrained('duties')->onDelete('cascade');
             $table->string('odts_code');
             $table->date('assigned_at');
