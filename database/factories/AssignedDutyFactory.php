@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Officer;
+use App\Models\User;
 use App\Models\Duty;
 
 /**
@@ -19,7 +19,7 @@ class AssignedDutyFactory extends Factory
     public function definition(): array
     {
         return [
-            'officer_id' => Officer::inRandomOrder()->first()?->id ?? Officer::factory(),   // Randomly use an existing officer or create if none exist     
+            'officer_id' => User::inRandomOrder()->first()?->id ?? User::factory(),   // Randomly use an existing officer or create if none exist     
             'duty_id' => Duty::inRandomOrder()->first()?->id ?? Duty::factory(),            // Randomly use an existing duty or create if none exist           
             'odts_code' => '(' . $this->faker->numberBetween(1000, 9999) . ')', // generate code like (1234)
             'is_done' => $this->faker->boolean(),

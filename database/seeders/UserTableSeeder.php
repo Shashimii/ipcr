@@ -13,13 +13,14 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // dummy user data
+        // default admin user data
         $user = [
             'name' => 'Shashimii',
             'email' => 'shashimii@gmail.com',
             'password' => bcrypt('password'),
+            'role' => 1
         ];
 
-        User::insert($user); // Insert the user data into the users table
+        User::insert($user); // insert admin user
     }
 }

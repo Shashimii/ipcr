@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\AssignedDuty;
 use App\Models\Duty;
-use App\Models\Officer;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +17,7 @@ class AssignedDutySeeder extends Seeder
     {   
         // Create 10 duties, 7 officers, and 20 assigned duties
         Duty::factory(10)->create();
-        Officer::factory(7)->create();
+        User::factory(7)->create();
         AssignedDuty::factory(20)->create();
     }
 }
