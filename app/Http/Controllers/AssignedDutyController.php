@@ -53,7 +53,7 @@ class AssignedDutyController extends Controller
 
     public function edit(AssignedDuty $assignedDuty)
     {
-        $officers = OfficerResource::collection(Officer::all());
+        $officers = OfficerResource::collection(User::where('role', 0)->get());
         $duties = DutyResource::collection(Duty::all());
 
         return inertia('AssignedDuties/Edit', [
