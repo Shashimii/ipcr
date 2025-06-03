@@ -11,7 +11,7 @@ use App\Http\Resources\OfficerResource;
 use App\Http\Resources\DutyResource;
 use App\Http\Resources\AssignedDutyResource;
 use App\Models\AssignedDuty;
-use App\Models\Officer;
+use App\Models\User;
 use App\Models\Duty;
 use Inertia\Inertia;
 
@@ -23,7 +23,7 @@ class AssignedDutyController extends Controller
         $assignedDutiesQuery = AssignedDuty::search($request)->with(['officer', 'duty']);
 
         $assignedDuties = AssignedDutyResource::collection($assignedDutiesQuery->paginate(10));
-        $officers = OfficerResource::collection(Officer::all());
+        $officers = OfficerResource::collection(User::where('role', 0)->get());
 
         return Inertia::render('AssignedDuties/Index', [
             'search' => $request->search ?? '',
@@ -36,7 +36,7 @@ class AssignedDutyController extends Controller
 
     public function create()
     {
-        $officers = OfficerResource::collection(Officer::all());
+        $officers = OfficerResource::collection(User::where('role', 0)->get());
         $duties = DutyResource::collection(Duty::all());
 
         return Inertia::render('AssignedDuties/Create', [

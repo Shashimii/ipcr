@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOfficerRequest;
 use App\Http\Requests\UpdateOfficerRequest;
 use App\Http\Resources\OfficerResource;
-use App\Models\Officer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,8 +14,8 @@ class OfficerController extends Controller
 {
     public function index(Request $request)
     {
-        $officersQuery = Officer::search($request);
-        $officers = OfficerResource::collection($officersQuery->paginate(10));
+        $officersQuery = User::search($request);
+        $officers = OfficerResource::collection($officersQuery->where('role', 0)->paginate(10));
 
         return Inertia::render('Officers/Index', [
             'officers' => $officers
@@ -24,29 +24,23 @@ class OfficerController extends Controller
 
     public function create()
     {
-        return Inertia::render('Officers/Create');
+        return redirect()->route('admin.register');
     }
 
-    public function store(StoreOfficerRequest $request)
-    {
-        Officer::create($request->validated());
-        return redirect()->route('officers.index');
-    }
-
-    public function edit(Officer $officer)
+    public function edit(User $officer)
     {
         return Inertia('Officers/Edit', [
             'officer' => OfficerResource::make($officer)
         ]);
     }
 
-    public function update(UpdateOfficerRequest $request, Officer $officer)
+    public function update(UpdateOfficerRequest $request, User $officer)
     {
         $officer->update($request->validated());
         return redirect()->route('officers.index');
     }
 
-    public function destroy(Officer $officer)
+    public function destroy(User $officer)
     {
         $officer->delete();
         return redirect()->back();

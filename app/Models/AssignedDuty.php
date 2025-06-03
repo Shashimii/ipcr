@@ -22,7 +22,7 @@ class AssignedDuty extends Model
     // Relationships
     public function officer()
     {
-        return $this->belongsTo(Officer::class);
+        return $this->belongsTo(User::class);
     }
 
     public function duty()
