@@ -6,11 +6,37 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    // User Roles
+    const ROLE_USER = 0;
+    const ROLE_ADMIN = 1;
+
+    public function isAdmin() 
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    // Relationships
+    public function assignedDuty() {
+        return $this->hasMany(AssignedDuty::class, 'officer_id');
+    }
+
+    // Search Query
+    public function scopeSearch(Builder $query, Request $request)
+    {
+        return $query->when($request->search, function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    // Defaults
+    
     /**
      * The attributes that are mass assignable.
      *
