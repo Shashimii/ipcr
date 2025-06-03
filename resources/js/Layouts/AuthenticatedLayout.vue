@@ -41,7 +41,7 @@ const showingNavigationDropdown = ref(false);
                                     :href="route('assigned-duties.index')"
                                     :active="route().current('assigned-duties.index') || route().current('assigned-duties.create') || route().current('assigned-duties.edit')"
                                 >
-                                    Assigned Duties
+                                    Assigned Tasks
                                 </NavLink>
                                 <NavLink
                                     :href="route('officers.index')"

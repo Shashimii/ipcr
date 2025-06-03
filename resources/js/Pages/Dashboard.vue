@@ -180,11 +180,11 @@ const excelExport = async () => {
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="w-full mb-8 grid grid-cols-3 gap-4">
                     <div class="bg-green-500 text-white p-4 border-gray-300 rounded shadow flex justify-between">
-                        <p>Total Completed Duties: </p>
+                        <p>Total Completed Tasks: </p>
                         <p>{{ completedDuties }}</p>
                     </div>
                     <div class="bg-red-500 text-white p-4 border-gray-300 rounded shadow flex justify-between">
-                        <p>Total Pending Duties: </p>
+                        <p>Total Pending Tasks: </p>
                         <p>{{ pendingDuties }}</p>
                     </div>
                     <div class="bg-blue-500 text-white p-4 border-gray-300 rounded shadow flex justify-between">
@@ -199,10 +199,10 @@ const excelExport = async () => {
                                 <h3
                                     class="text-lg leading-6 font-medium text-gray-900"
                                 >
-                                    IPCR Table
+                                    IPCR Tracker Table
                                 </h3>
                                 <p class="mt-1 text-sm text-gray-500">
-                                    Assigned Duties to the officers are shown here.
+                                    Assigned Tasks to the officers are shown here.
                                 </p>
                             </div>
                             

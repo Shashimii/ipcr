@@ -50,14 +50,14 @@ const cancel = () => {
 </script>
 
 <template>
-    <Head title="Assign Duty" />
+    <Head title="Assign Task" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Assign Duty
+                Assign Task
             </h2>
         </template>
 
@@ -73,10 +73,10 @@ const cancel = () => {
                                             <h3
                                                 class="text-lg leading-6 font-medium text-gray-900"
                                             >
-                                                Duty Information
+                                                Task Information
                                             </h3>
                                             <p class="mt-1 text-sm text-gray-500">
-                                                Use this form to assign new duty.
+                                                Use this form to assign new task.
                                             </p>
                                         </div>
 
@@ -162,7 +162,7 @@ const cancel = () => {
                                                 <label for="is_done" class="flex items-center">
                                                     <Checkbox id="is_done" name="is_done" v-model:checked="form.is_done" />
                                                     <span class="ms-2 text-sm text-gray-600"
-                                                        >Duty is Already Done.</span
+                                                        >Task is Already Done.</span
                                                     >
                                                 </label>
                                             </div>
@@ -175,7 +175,7 @@ const cancel = () => {
                                             Cancel
                                         </SecondaryButton>
                                         <PrimaryButton :disabled="form.processing">
-                                            Assign Duty
+                                            Assign Task
                                         </PrimaryButton>
                                     </div>
                                 </div>

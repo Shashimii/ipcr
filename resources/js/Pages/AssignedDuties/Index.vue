@@ -143,7 +143,7 @@ watch(
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Assign Duties
+                Assigned Tasks
             </h2>
         </template>
 
@@ -152,10 +152,10 @@ watch(
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
                         <h1 class="text-xl font-semibold text-gray-900">
-                            Assigned Duties List
+                            Assigned Tasks List
                         </h1>
                         <p class="mt-2 text-sm text-gray-700">
-                            A list of all Assigned Duties.
+                            A list of all Assigned Task.
                         </p>
                     </div>
 
@@ -164,7 +164,7 @@ watch(
                             :href="route('assigned-duties.create')"
                             class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                         >
-                            Assign Duty
+                            Assign Task
                         </Link>
                     </div>
                 </div>
